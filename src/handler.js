@@ -55,7 +55,47 @@ const addBookHandler = (request, h) => {
     return response;
 };
 
-const getAllBooksHandler = () => {
+const getAllBooksHandler = (request, h) => {
+    const { reading, finished, name } = request.query;
+    
+    if (reading == 0) {
+        const filterBooks = books.filter((book) => book.reading == false);
+        const mappingBooks = filterBooks.map((book) => ({id: book.id, name: book.name, publisher: book.publisher }));
+        const newBooks = ({books: mappingBooks});
+        return ({status: 'success', data: newBooks });
+    }
+
+    if (reading == 1) {
+        const filterBooks = books.filter((book) => book.reading == true);
+        const mappingBooks = filterBooks.map((book) => ({id: book.id, name: book.name, publisher: book.publisher }));
+        const newBooks = ({books: mappingBooks});
+
+        return ({status: 'success', data: newBooks });
+    }
+
+    if (finished == 0) {
+        const filterBooks = books.filter((book) => book.finished == false);
+        const mappingBooks = filterBooks.map((book) => ({id: book.id, name: book.name, publisher: book.publisher }));
+        const newBooks = ({books: mappingBooks});
+        return ({status: 'success', data: newBooks });
+    }
+
+    if (finished == 1) {
+        const filterBooks = books.filter((book) => book.finished == true);
+        const mappingBooks = filterBooks.map((book) => ({id: book.id, name: book.name, publisher: book.publisher }));
+        const newBooks = ({books: mappingBooks});
+
+        return ({status: 'success', data: newBooks });
+    }
+
+    if (name !== undefined) {
+        const filterBooks = books.filter((book) => book.name.toLowerCase().includes(name.toLowerCase()));
+        const mappingBooks = filterBooks.map((book) => ({id: book.id, name: book.name, publisher: book.publisher }));
+        const newBooks = ({books: mappingBooks});
+
+        return ({status: 'success', data: newBooks });
+    }
+
     const mappingBooks = books.map((book) => ({id: book.id, name: book.name, publisher: book.publisher }));
     const newBooks = ({books: mappingBooks});
 
@@ -67,7 +107,7 @@ const getBookByIdHandler = (request, h) => {
 
     const book = books.filter((n) => n.id === id)[0];
 
-    if(book !== undefined) {
+    if (book !== undefined) {
         return {
             status: 'success',
             data: { book },
