@@ -8,7 +8,7 @@ const addBookHandler = (request, h) => {
     const insertedAt = new Date().toISOString();
     const updatedAt = insertedAt;
     const isNameValid = name !== undefined;
-    const isPageValid = readPage < pageCount;
+    const isPageValid = readPage < pageCount || readPage === pageCount;
 
     const newBook = { id, name, year, author, summary, publisher, pageCount, readPage, finished, reading, insertedAt, updatedAt };
 
@@ -55,6 +55,14 @@ const addBookHandler = (request, h) => {
     return response;
 };
 
+const getAllBooksHandler = () => {
+    const mappingBooks = books.map((book) => ({id: book.id, name: book.name, publisher: book.publisher }));
+    const newBooks = ({books: mappingBooks});
+
+    return ({status: 'success', data: newBooks });
+};
+
 module.exports = {
     addBookHandler,
+    getAllBooksHandler,
 };
